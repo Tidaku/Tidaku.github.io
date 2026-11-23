@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projet Personnel — Tiago Da Cunha</title>
+  <meta name="description" content="Projet Personnel (M2L) : application Java de gestion des employés des ligues, rendue multi-utilisateurs avec une base de données.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../">Tiago <span>Da Cunha</span></a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="../#a-propos">À propos</a>
+      <a href="../#competences">Compétences</a>
+      <a href="../#projets" aria-current="page">Projets</a>
+      <a href="../#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="project-hero">
+    <div class="wrap">
+      <p class="eyebrow"><a href="../#projets">Projets</a> · Atelier professionnel</p>
+      <h1>Personnel — gestion des employés des ligues</h1>
+      <p class="lead">
+        Application Java de la Maison des Ligues de Lorraine (M2L) qui recense les employés
+        de chaque ligue. Notre mission : la rendre multi-utilisateurs grâce à une base de
+        données et mettre en place trois niveaux de droits.
+      </p>
+      <ul class="meta">
+        <li><strong>Équipe :</strong> Tiago Da Cunha, Arthur Lee</li>
+        <li><strong>Technologies :</strong> Java, MySQL, JDBC, JUnit 5, Maven</li>
+        <li><strong>Outils :</strong> Eclipse, Git / GitHub, Looping (MCD)</li>
+      </ul>
+      <div class="actions">
+        <a class="btn primary" href="https://github.com/Tidaku/personnel" target="_blank" rel="noopener">Code source sur GitHub</a>
+        <a class="btn" href="personnel/javadoc/index.html">Documentation détaillée (Javadoc)</a>
+      </div>
+      <nav class="toc" aria-label="Sommaire">
+        <a href="#contexte">Contexte</a>
+        <a href="#ressources">Ressources fournies / notre travail</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#mcd">MCD et base de données</a>
+        <a href="#captures">Captures d'écran</a>
+        <a href="#avancement">Avancement</a>
+        <a href="#liens">Liens</a>
+      </nav>
+    </div>
+  </section>
+
+  <section id="contexte">
+    <div class="wrap">
+      <p class="eyebrow">Contexte</p>
+      <h2>Le besoin</h2>
+      <p>
+        Un responsable de la M2L utilise une petite application pour gérer les employés des
+        ligues. Elle fonctionne <strong>uniquement en ligne de commande</strong> et
+        <strong>pour un seul utilisateur</strong> : les données sont enregistrées dans un
+        fichier sur son poste. La M2L souhaite désigner un administrateur par ligue, chargé
+        de recenser les employés de sa ligue.
+      </p>
+      <p>Trois niveaux d'habilitation sont demandés :</p>
+      <ul class="levels">
+        <li><strong>Employé</strong><span>Consulte l'application comme un annuaire, sans droit d'écriture.</span></li>
+        <li><strong>Administrateur de ligue</strong><span>Gère les employés de sa propre ligue (application bureau).</span></li>
+        <li><strong>Super-administrateur</strong><span>Accès en écriture à tous les employés et gestion des administrateurs de ligue (ligne de commande).</span></li>
+      </ul>
+      <p style="margin-top:1em">
+        Contrainte imposée : <strong>conserver l'architecture 3-tiers</strong> de l'application.
+      </p>
+    </div>
+  </section>
+
+  <section id="ressources">
+    <div class="wrap">
+      <p class="eyebrow">Point de départ</p>
+      <h2>Ce qui était fourni, ce que nous avons fait</h2>
+      <div class="compare">
+        <div class="card">
+          <h3>Ressources fournies</h3>
+          <ul>
+            <li>
+              Le <a href="https://github.com/alexandreMesle/personnel" target="_blank" rel="noopener">code source de départ</a>
+              sur GitHub : classes métier <code>Ligue</code>, <code>Employe</code>,
+              <code>GestionPersonnel</code>, menus en console, sauvegarde par sérialisation
+              et une ébauche de passerelle JDBC.
+            </li>
+            <li>
+              La <a href="https://enseignement.alexandre-mesle.com/PPE/personnel/javadoc/" target="_blank" rel="noopener">documentation (Javadoc)</a>
+              de ce code.
+            </li>
+            <li>
+              La bibliothèque <a href="https://github.com/alexandreMesle/CommandLine" target="_blank" rel="noopener">CommandLine</a>,
+              qui sert à construire les menus en ligne de commande.
+            </li>
+            <li>Un projet configuré pour Eclipse uniquement.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Ce que nous avons réalisé</h3>
+          <ul>
+            <li>Configuration <strong>Maven + JUnit 5</strong> pour compiler et tester le projet hors d'Eclipse.</li>
+            <li><strong>Arbre heuristique</strong> de tous les menus de l'application.</li>
+            <li><strong>MCD</strong> de l'application, puis <strong>script SQL</strong> de création des tables (MySQL).</li>
+            <li>Ajout des <strong>dates d'arrivée et de départ</strong> des employés, avec contrôle de cohérence (exception <code>DatesIncoherentes</code>).</li>
+            <li>
+              <strong>Corrections de bugs</strong> dans le code fourni : employés et ligues introuvables
+              après un renommage (tri du <code>TreeSet</code>), homonymes perdus, plantage de
+              <code>getLigue</code> pour le root, employés conservés après la suppression d'une ligue.
+            </li>
+            <li><strong>39 tests unitaires</strong> JUnit sur les ligues, les employés et les dates.</li>
+            <li>Travail en binôme sur un dépôt GitHub commun.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="architecture">
+    <div class="wrap">
+      <p class="eyebrow">Architecture</p>
+      <h2>Une application en 3 couches</h2>
+      <p>
+        Chaque couche a un rôle précis. La couche métier ne sait pas où les données sont
+        stockées : elle passe par l'interface <code>Passerelle</code>. On peut donc remplacer
+        le fichier sérialisé par une base de données sans toucher au reste.
+      </p>
+      <div class="tiers">
+        <div class="tier">
+          <div class="name">Présentation <small>package commandLine</small></div>
+          <p>Menus en ligne de commande : <code>PersonnelConsole</code>, <code>LigueConsole</code>, <code>EmployeConsole</code>.</p>
+        </div>
+        <div class="tier-arrow">↓ appelle</div>
+        <div class="tier">
+          <div class="name">Métier <small>package personnel</small></div>
+          <p>Règles de gestion : <code>GestionPersonnel</code>, <code>Ligue</code>, <code>Employe</code>, exceptions (droits, dates, root).</p>
+        </div>
+        <div class="tier-arrow">↓ interface Passerelle</div>
+        <div class="tier">
+          <div class="name">Données <small>serialisation / jdbc</small></div>
+          <p>Fichier sérialisé (version d'origine) ou base MySQL via JDBC (version multi-utilisateurs).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mcd">
+    <div class="wrap">
+      <p class="eyebrow">Modélisation</p>
+      <h2>MCD et base de données</h2>
+      <p>
+        Un employé appartient à au plus une ligue (le root n'en a pas) et chaque ligue a
+        exactement un administrateur. L'identifiant <code>idEmploye</code> n'existe pas dans le
+        code Java : il est nécessaire pour la base de données relationnelle.
+      </p>
+      <figure class="shot white">
+        <a href="../assets/img/personnel/mcd.png"><img src="../assets/img/personnel/mcd.png" alt="MCD : entités Employe (idEmploye, nom, prénom, email, password, dateArrivee, dateDepart) et Ligue (idLigue, nom), associations Appartenir (0,1 – 0,n) et Administrer (0,n – 1,1)" width="1091" height="487" loading="lazy"></a>
+        <figcaption>MCD réalisé avec Looping.</figcaption>
+      </figure>
+      <details>
+        <summary>Voir le script SQL de création des tables</summary>
+<pre class="code"><span class="k">CREATE TABLE</span> employe (
+  id_employe   INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nom          VARCHAR(100) NOT NULL,
+  prenom       VARCHAR(100) NOT NULL,
+  mail         VARCHAR(255) NOT NULL,
+  password     VARCHAR(255) NOT NULL,
+  date_arrivee DATE NULL,
+  date_depart  DATE NULL,
+  id_ligue     INT UNSIGNED NULL,
+  <span class="k">CONSTRAINT</span> ck_employe_dates <span class="k">CHECK</span> (
+    date_depart IS NULL
+    OR (date_arrivee IS NOT NULL AND date_depart &gt;= date_arrivee)
+  )
+) ENGINE=InnoDB;
+
+<span class="k">CREATE TABLE</span> ligue (
+  id_ligue          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nom               VARCHAR(100) NOT NULL,
+  id_administrateur INT UNSIGNED NOT NULL,
+  <span class="k">CONSTRAINT</span> uq_ligue_nom <span class="k">UNIQUE</span> (nom),
+  <span class="k">CONSTRAINT</span> fk_ligue_administrateur <span class="k">FOREIGN KEY</span> (id_administrateur)
+    <span class="k">REFERENCES</span> employe (id_employe) ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
+<span class="k">ALTER TABLE</span> employe
+  <span class="k">ADD CONSTRAINT</span> fk_employe_ligue <span class="k">FOREIGN KEY</span> (id_ligue)
+    <span class="k">REFERENCES</span> ligue (id_ligue) ON DELETE CASCADE;</pre>
+        <p style="margin:12px 0 0">
+          La contrainte <code>CHECK</code> reprend en base la règle des dates déjà vérifiée dans le code Java.
+          Fichier complet : <a href="https://github.com/Tidaku/personnel/blob/master/Personnel/Basedonn%C3%A9esLigue.sql" target="_blank" rel="noopener">BasedonnéesLigue.sql</a>.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <section id="captures">
+    <div class="wrap">
+      <p class="eyebrow">Démonstration</p>
+      <h2>Captures d'écran</h2>
+      <p>
+        L'application se lance en console. Le super-administrateur (root) se connecte avec
+        son mot de passe, puis navigue dans les menus en tapant la lettre de l'option
+        (saisies en jaune).
+      </p>
+      <div class="shots">
+        <figure class="shot">
+          <a href="../assets/img/personnel/01-connexion-ligues.png"><img src="../assets/img/personnel/01-connexion-ligues.png" alt="Console : connexion du root, menu principal, ajout de deux ligues puis affichage de la liste des ligues" loading="lazy"></a>
+          <figcaption>Connexion du root, ajout de deux ligues et affichage de la liste.</figcaption>
+        </figure>
+        <figure class="shot">
+          <a href="../assets/img/personnel/02-employes.png"><img src="../assets/img/personnel/02-employes.png" alt="Console : sélection de la ligue de football, ajout d'employés puis affichage des employés de la ligue" loading="lazy"></a>
+          <figcaption>Sélection d'une ligue, ajout d'employés et affichage des employés.</figcaption>
+        </figure>
+        <figure class="shot">
+          <a href="../assets/img/personnel/03-tests.png"><img src="../assets/img/personnel/03-tests.png" alt="Résultat des tests JUnit : 39 tests trouvés, 39 réussis, 0 échec" loading="lazy"></a>
+          <figcaption>Les 39 tests unitaires JUnit passent.</figcaption>
+        </figure>
+      </div>
+      <figure class="shot white" style="margin-top:20px">
+        <a href="../assets/img/personnel/arbre-heuristique.png"><img src="../assets/img/personnel/arbre-heuristique.png" alt="Arbre heuristique de tous les menus de l'application Personnel" loading="lazy"></a>
+        <figcaption>Arbre heuristique des menus de l'application (cliquer pour agrandir).</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="avancement">
+    <div class="wrap">
+      <p class="eyebrow">Avancement</p>
+      <h2>Où en est le projet ?</h2>
+      <ul class="progress">
+        <li><span class="badge ok">Fait</span> Itération 1 : prise en main du code, Maven / JUnit, arbre heuristique, MCD, dates d'arrivée et de départ, corrections de bugs, tests unitaires.</li>
+        <li><span class="badge ok">Fait</span> Script SQL de création des tables.</li>
+        <li><span class="badge todo">En cours</span> Saisie des dates et changement d'administrateur depuis la ligne de commande.</li>
+        <li><span class="badge todo">En cours</span> Passerelle JDBC : lecture et écriture des ligues et des employés dans la base MySQL.</li>
+        <li><span class="badge todo">À venir</span> Application bureau pour les administrateurs de ligue et gestion des trois niveaux de droits.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="liens">
+    <div class="wrap">
+      <p class="eyebrow">Ressources</p>
+      <h2>Liens</h2>
+      <div class="links">
+        <a class="card link" href="https://github.com/Tidaku/personnel" target="_blank" rel="noopener">
+          <strong>Code source du projet</strong><small>github.com/Tidaku/personnel</small>
+        </a>
+        <a class="card link" href="personnel/javadoc/index.html">
+          <strong>Documentation détaillée</strong><small>Javadoc de notre version du code</small>
+        </a>
+        <a class="card link" href="https://github.com/alexandreMesle/personnel" target="_blank" rel="noopener">
+          <strong>Code fourni au départ</strong><small>github.com/alexandreMesle/personnel</small>
+        </a>
+        <a class="card link" href="https://enseignement.alexandre-mesle.com/PPE/personnel/javadoc/" target="_blank" rel="noopener">
+          <strong>Documentation fournie</strong><small>Javadoc d'origine</small>
+        </a>
+        <a class="card link" href="https://github.com/alexandreMesle/CommandLine" target="_blank" rel="noopener">
+          <strong>Bibliothèque CommandLine</strong><small>Menus en ligne de commande</small>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Tiago Da Cunha</span>
+    <a href="../">← Retour au portfolio</a>
+  </div>
+</footer>
+
+</body>
+</html>
